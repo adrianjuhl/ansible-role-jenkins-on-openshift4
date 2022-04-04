@@ -1,0 +1,5 @@
+---
+# defaults file for adrianjuhl.jenkins_on_openshift4
+
+adrianjuhl__jenkins_on_openshift4__openshift_server_url: "https://api.crc.testing:6443"
+adrianjuhl__jenkins_on_openshift4__openshift_namespace_jenkins: "jenkins"

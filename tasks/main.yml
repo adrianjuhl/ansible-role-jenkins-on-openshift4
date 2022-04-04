@@ -1,0 +1,6 @@
+---
+# tasks file for adrianjuhl.jenkins_on_openshift4
+- name: Ensure that the oc client is currently connected to the expected server and project
+  include_tasks: ensure_valid_oc_client_connection.yml
+- name: Configure (create/update) the OCP resources for jenkins
+  include_tasks: configure_jenkins_ocp_resources.yml

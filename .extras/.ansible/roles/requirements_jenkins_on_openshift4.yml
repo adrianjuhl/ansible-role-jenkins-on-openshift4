@@ -1,0 +1,10 @@
+---
+# From ansible-galaxy (a release tag)
+- src: adrianjuhl.jenkins_on_openshift4
+  version: 0.1.0
+
+# From a branch from the github repo
+# - src: https://github.com/adrianjuhl/ansible-role-jenkins-on-openshift4
+#   scm: git
+#   version: main
+#   name: adrianjuhl.jenkins_on_openshift4

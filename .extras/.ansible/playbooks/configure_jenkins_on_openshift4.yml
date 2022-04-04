@@ -1,0 +1,7 @@
+---
+- name: Configure Jenkins on OpenShift4
+  hosts: localhost
+  tasks:
+    - name: Configure Jenkins on OpenShift4
+      include_role:
+        name: adrianjuhl.jenkins_on_openshift4
