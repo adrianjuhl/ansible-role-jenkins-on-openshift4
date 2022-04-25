@@ -1,0 +1,67 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: jenkins-agent-maven
+  annotations:
+    openshift.io/generated-by: OpenShiftNewApp
+  creationTimestamp: null
+  labels:
+    app: jenkins-persistent
+    template: jenkins-persistent-template
+    role: jenkins-agent
+data:
+  maven: |-
+    <org.csanchez.jenkins.plugins.kubernetes.PodTemplate>
+      <name>maven</name>
+      <privileged>false</privileged>
+      <capOnlyOnAlivePods>false</capOnlyOnAlivePods>
+      <alwaysPullImage>false</alwaysPullImage>
+      <instanceCap>2147483647</instanceCap>
+      <slaveConnectTimeout>1000</slaveConnectTimeout>
+      <idleMinutes>0</idleMinutes>
+      <activeDeadlineSeconds>0</activeDeadlineSeconds>
+      <label>maven</label>
+      <serviceAccount>jenkins</serviceAccount>
+      <hostNetwork>false</hostNetwork>
+      <volumes>
+        <org.csanchez.jenkins.plugins.kubernetes.volumes.PersistentVolumeClaim>
+          <mountPath>/home/jenkins/.m2</mountPath>
+          <claimName>jenkins-agent-maven-dotm2-directory</claimName>
+          <readOnly>false</readOnly>
+        </org.csanchez.jenkins.plugins.kubernetes.volumes.PersistentVolumeClaim>
+      </volumes>
+      <containers>
+        <org.csanchez.jenkins.plugins.kubernetes.ContainerTemplate>
+          <name>jnlp</name>
+          <image>image-registry.openshift-image-registry.svc:5000/openshift/jenkins-agent-maven:latest</image>
+          <privileged>false</privileged>
+          <alwaysPullImage>true</alwaysPullImage>
+          <workingDir>/tmp</workingDir>
+          <command></command>
+          <args>${computer.jnlpmac} ${computer.name}</args>
+          <ttyEnabled>false</ttyEnabled>
+          <resourceRequestCpu></resourceRequestCpu>
+          <resourceRequestMemory></resourceRequestMemory>
+          <resourceRequestEphemeralStorage></resourceRequestEphemeralStorage>
+          <resourceLimitCpu></resourceLimitCpu>
+          <resourceLimitMemory>1Gi</resourceLimitMemory>
+          <resourceLimitEphemeralStorage></resourceLimitEphemeralStorage>
+          <envVars/>
+          <ports/>
+          <livenessProbe>
+            <execArgs></execArgs>
+            <timeoutSeconds>0</timeoutSeconds>
+            <initialDelaySeconds>0</initialDelaySeconds>
+            <failureThreshold>0</failureThreshold>
+            <periodSeconds>0</periodSeconds>
+            <successThreshold>0</successThreshold>
+          </livenessProbe>
+        </org.csanchez.jenkins.plugins.kubernetes.ContainerTemplate>
+      </containers>
+      <envVars/>
+      <annotations/>
+      <imagePullSecrets/>
+      <nodeProperties/>
+      <yamlMergeStrategy class="org.csanchez.jenkins.plugins.kubernetes.pod.yaml.Overrides"/>
+      <showRawYaml>true</showRawYaml>
+    </org.csanchez.jenkins.plugins.kubernetes.PodTemplate>

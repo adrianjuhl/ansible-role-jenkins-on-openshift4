@@ -1,4 +1,9 @@
 
+### v0.2.0
+
+* [Configuring Jenkins images in OpenShift4](https://docs.openshift.com/container-platform/4.10/openshift_images/using_images/images-other-jenkins.html)
+* [Simplify Jenkins Agents Setup in OpenShift4](https://dale-bingham-soteriasoftware.medium.com/simplify-jenkins-slave-agents-setup-in-openshift-4d62a26eda29)
+
 ### v0.1.0
 
 The default resource list file was generated in the following way:

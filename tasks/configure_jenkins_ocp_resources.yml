@@ -18,6 +18,21 @@
   changed_when: false
   args:
     stdin: "{{ lookup('file', 'jenkins-PersistentVolumeClaim.yaml') }}"
+
+- name: Create the jenkins-agent-maven-dotm2-directory-PersistentVolumeClaim
+  ansible.builtin.command:
+    cmd: "oc apply --filename=- --namespace={{ adrianjuhl__jenkins_on_openshift4__openshift_namespace_jenkins }}"
+  changed_when: false
+  args:
+    stdin: "{{ lookup('file', 'jenkins-agent-maven-dotm2-directory-PersistentVolumeClaim.yaml') }}"
+- name: Create the jenkins-agent-maven-ConfigMap
+  ansible.builtin.command:
+    cmd: "oc apply --filename=- --namespace={{ adrianjuhl__jenkins_on_openshift4__openshift_namespace_jenkins }}"
+  changed_when: false
+  args:
+    stdin: "{{ lookup('file', 'jenkins-agent-maven-ConfigMap.yaml') }}"
+
+
 - name: Configure the jenkins-DeploymentConfig
   ansible.builtin.command:
     cmd: "oc apply --filename=- --namespace={{ adrianjuhl__jenkins_on_openshift4__openshift_namespace_jenkins }}"
