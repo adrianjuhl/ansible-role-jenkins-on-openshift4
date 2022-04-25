@@ -75,6 +75,22 @@ spec:
               name: jenkins-data
             - mountPath: /etc/pki/ca-trust/source/anchors
               name: jenkins-trusted-ca-bundle
+      initContainers:
+        - name: configure-jenkins-agent-maven-dotm2-settings-xml-file
+          image: ' '
+          imagePullPolicy: IfNotPresent
+          command: ['sh']
+          args:
+            - -c
+            - >-
+                echo Copying settings.xml into place ... &&
+                cp /jenkins-agent-maven-dotm2-settings-xml/settings_xml /jenkins-agent-maven-dotm2-directory/settings.xml &&
+                echo Done
+          volumeMounts:
+            - mountPath: /jenkins-agent-maven-dotm2-directory
+              name: jenkins-agent-maven-dotm2-directory
+            - mountPath: /jenkins-agent-maven-dotm2-settings-xml
+              name: jenkins-agent-maven-dotm2-settings-xml
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       serviceAccountName: jenkins
@@ -86,12 +102,19 @@ spec:
             name: jenkins-trusted-ca-bundle
             optional: true
           name: jenkins-trusted-ca-bundle
+        - name: jenkins-agent-maven-dotm2-directory
+          persistentVolumeClaim:
+            claimName: jenkins-agent-maven-dotm2-directory
+        - name: jenkins-agent-maven-dotm2-settings-xml
+          secret:
+            secretName: jenkins-agent-maven-dotm2-settings-xml
   test: false
   triggers:
     - imageChangeParams:
         automatic: true
         containerNames:
           - jenkins
+          - configure-jenkins-agent-maven-dotm2-settings-xml-file
         from:
           kind: ImageStreamTag
           name: jenkins:2

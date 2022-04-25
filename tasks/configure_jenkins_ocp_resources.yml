@@ -31,6 +31,19 @@
   changed_when: false
   args:
     stdin: "{{ lookup('file', 'jenkins-agent-maven-ConfigMap.yaml') }}"
+- name: Create the jenkins-agent-maven-dotm2-settings-xml-Secret - build file content
+  set_fact:
+    adrianjuhl__jenkins_on_openshift4__maven_settings_xml_file_content: "{{
+        lookup('file', 'jenkins-agent-maven-dotm2-settings.xml')
+        | replace('<!-- SERVER1_CONFIG -->', adrianjuhl__jenkins_on_openshift4__maven_settings_server1)
+        | replace('<!-- SERVER2_CONFIG -->', adrianjuhl__jenkins_on_openshift4__maven_settings_server2)
+        | replace('<!-- SERVER3_CONFIG -->', adrianjuhl__jenkins_on_openshift4__maven_settings_server3)
+        | replace('<!-- MIRROR_CONFIG -->', adrianjuhl__jenkins_on_openshift4__maven_settings_mirror)
+      }}"
+- name: Create the jenkins-agent-maven-dotm2-settings-xml-Secret - from file content
+  ansible.builtin.shell:
+    cmd: "oc create secret generic jenkins-agent-maven-dotm2-settings-xml --from-literal=settings_xml='{{ adrianjuhl__jenkins_on_openshift4__maven_settings_xml_file_content }}' --dry-run=client --output=yaml --save-config | yq eval 'del(.metadata.annotations)' | oc apply --filename=- --namespace={{ adrianjuhl__jenkins_on_openshift4__openshift_namespace_jenkins }}"
+  changed_when: false
 
 
 - name: Configure the jenkins-DeploymentConfig

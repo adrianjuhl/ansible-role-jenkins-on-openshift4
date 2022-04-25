@@ -1,4 +1,8 @@
 
+### v0.3.0
+
+Add maven settings.xml file with configurable servers and mirror elements.
+
 ### v0.2.0
 
 Added config for the jenkins-agent-maven Pod Template.

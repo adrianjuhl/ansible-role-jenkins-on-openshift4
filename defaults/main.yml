@@ -3,3 +3,8 @@
 
 adrianjuhl__jenkins_on_openshift4__openshift_server_url: "https://api.crc.testing:6443"
 adrianjuhl__jenkins_on_openshift4__openshift_namespace_jenkins: "jenkins"
+
+adrianjuhl__jenkins_on_openshift4__maven_settings_server1: "<!-- No server1 is configured. -->"
+adrianjuhl__jenkins_on_openshift4__maven_settings_server2: "<!-- No server2 is configured. -->"
+adrianjuhl__jenkins_on_openshift4__maven_settings_server3: "<!-- No server3 is configured. -->"
+adrianjuhl__jenkins_on_openshift4__maven_settings_mirror: "<!-- No mirror is configured. -->"

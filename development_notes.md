@@ -1,4 +1,8 @@
 
+### v0.3.0
+
+The .m2/settings.xml file for maven is copied into place using initContainers config in the DeploymentConfig for jenkins. See [Init Containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/) kubernetes documentation.
+
 ### v0.2.0
 
 * [Configuring Jenkins images in OpenShift4](https://docs.openshift.com/container-platform/4.10/openshift_images/using_images/images-other-jenkins.html)
