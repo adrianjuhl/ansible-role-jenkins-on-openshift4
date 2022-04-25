@@ -1,4 +1,8 @@
 
+### v0.4.0
+
+Introduced the ability to configure the size and storage class of the PersistentVolumeClaims.
+ 
 ### v0.3.0
 
 Add maven settings.xml file with configurable servers and mirror elements.

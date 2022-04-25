@@ -13,15 +13,16 @@
   args:
     stdin: "{{ lookup('file', 'jenkins-trusted-ca-bundle-ConfigMap.yaml') }}"
 - name: Configure the jenkins-PersistentVolumeClaim
-  ansible.builtin.command:
-    cmd: "oc apply --filename=- --namespace={{ adrianjuhl__jenkins_on_openshift4__openshift_namespace_jenkins }}"
+  ansible.builtin.shell:
+    cmd: "yq eval '.spec.resources.requests.storage=\"{{ adrianjuhl__jenkins_on_openshift4__jenkins_pvc_storage_size }}\" | .spec.storageClassName=\"{{ adrianjuhl__jenkins_on_openshift4__jenkins_pvc_storage_class_name }}\"' | oc apply --filename=- --namespace={{ adrianjuhl__jenkins_on_openshift4__openshift_namespace_jenkins }}"
+#    cmd: "oc apply --filename=- --namespace={{ adrianjuhl__jenkins_on_openshift4__openshift_namespace_jenkins }}"
   changed_when: false
   args:
     stdin: "{{ lookup('file', 'jenkins-PersistentVolumeClaim.yaml') }}"
-
 - name: Create the jenkins-agent-maven-dotm2-directory-PersistentVolumeClaim
-  ansible.builtin.command:
-    cmd: "oc apply --filename=- --namespace={{ adrianjuhl__jenkins_on_openshift4__openshift_namespace_jenkins }}"
+  ansible.builtin.shell:
+    cmd: "yq eval '.spec.resources.requests.storage=\"{{ adrianjuhl__jenkins_on_openshift4__jenkins_agent_maven_dotm2_directory_pvc_storage_size }}\" | .spec.storageClassName=\"{{ adrianjuhl__jenkins_on_openshift4__jenkins_agent_maven_dotm2_directory_pvc_storage_class_name }}\"' | oc apply --filename=- --namespace={{ adrianjuhl__jenkins_on_openshift4__openshift_namespace_jenkins }}"
+#    cmd: "oc apply --filename=- --namespace={{ adrianjuhl__jenkins_on_openshift4__openshift_namespace_jenkins }}"
   changed_when: false
   args:
     stdin: "{{ lookup('file', 'jenkins-agent-maven-dotm2-directory-PersistentVolumeClaim.yaml') }}"
@@ -44,8 +45,6 @@
   ansible.builtin.shell:
     cmd: "oc create secret generic jenkins-agent-maven-dotm2-settings-xml --from-literal=settings_xml='{{ adrianjuhl__jenkins_on_openshift4__maven_settings_xml_file_content }}' --dry-run=client --output=yaml --save-config | yq eval 'del(.metadata.annotations)' | oc apply --filename=- --namespace={{ adrianjuhl__jenkins_on_openshift4__openshift_namespace_jenkins }}"
   changed_when: false
-
-
 - name: Configure the jenkins-DeploymentConfig
   ansible.builtin.command:
     cmd: "oc apply --filename=- --namespace={{ adrianjuhl__jenkins_on_openshift4__openshift_namespace_jenkins }}"

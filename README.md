@@ -22,6 +22,54 @@ The REST API URL of the OpenShift4 server on which Jenkins is to be configured.
 
 The name of the namespace in which Jenkins is to be configured.
 
+**jenkins_pvc_storage_size**
+
+    adrianjuhl__jenkins_on_openshift4__jenkins_pvc_storage_size: "1G"
+
+The amount of storage to allocate for Jenkins own application and data.
+
+**jenkins_pvc_storage_class_name**
+
+    adrianjuhl__jenkins_on_openshift4__jenkins_pvc_storage_class_name: ""
+
+The storage class to use for the storage for Jenkins.
+
+**jenkins_agent_maven_dotm2_directory_pvc_storage_size**
+
+    adrianjuhl__jenkins_on_openshift4__jenkins_agent_maven_dotm2_directory_pvc_storage_size: "2Gi"
+
+The amount of storage to allocate for use as the .m2 directory on the maven agent pods.
+
+**jenkins_agent_maven_dotm2_directory_pvc_storage_class_name**
+
+    adrianjuhl__jenkins_on_openshift4__jenkins_agent_maven_dotm2_directory_pvc_storage_class_name: ""
+
+The storage class to use for the storage for the .m2 directory on the maven agent pods.
+
+**maven_settings_server1**
+
+    adrianjuhl__jenkins_on_openshift4__maven_settings_server1: "<!-- No server1 is configured. -->"
+
+The server element (first of up to three) to be used in the .m2/settings.xml file of maven agent pods.
+
+**maven_settings_server2**
+
+    adrianjuhl__jenkins_on_openshift4__maven_settings_server2: "<!-- No server2 is configured. -->"
+
+The server element (second of up to three) to be used in the .m2/settings.xml file of maven agent pods.
+
+**maven_settings_server3**
+
+    adrianjuhl__jenkins_on_openshift4__maven_settings_server3: "<!-- No server3 is configured. -->"
+
+The server element (third of up to three) to be used in the .m2/settings.xml file of maven agent pods.
+
+**maven_settings_mirror**
+
+    adrianjuhl__jenkins_on_openshift4__maven_settings_mirror: "<!-- No mirror is configured. -->"
+
+The mirror element to be used in the .m2/settings.xml file of maven agent pods.
+
 ## Dependencies
 
 None.

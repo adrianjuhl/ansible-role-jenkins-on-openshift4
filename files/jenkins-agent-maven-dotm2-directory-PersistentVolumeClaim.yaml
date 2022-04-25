@@ -10,8 +10,9 @@ metadata:
   name: jenkins-agent-maven-dotm2-directory
 spec:
   accessModes:
-  - ReadWriteMany
+    - ReadWriteMany
   resources:
     requests:
-      storage: 1Gi
+      storage: 2Gi
+  storageClassName: ""
 status: {}
