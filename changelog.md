@@ -1,4 +1,8 @@
 
+### v0.5.0
+
+Introduced the ability to configure addition plugins to install with Jenkins.
+
 ### v0.4.0
 
 Introduced the ability to configure the size and storage class of the PersistentVolumeClaims.

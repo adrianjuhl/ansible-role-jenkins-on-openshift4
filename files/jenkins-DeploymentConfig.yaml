@@ -46,6 +46,8 @@ spec:
               value: "false"
             - name: CASC_JENKINS_CONFIG
               value: /var/lib/jenkins/proxy.yaml
+            - name: INSTALL_PLUGINS
+              value: ""
           image: ' '
           imagePullPolicy: IfNotPresent
           livenessProbe:

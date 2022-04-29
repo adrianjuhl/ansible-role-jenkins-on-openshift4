@@ -70,6 +70,12 @@ The server element (third of up to three) to be used in the .m2/settings.xml fil
 
 The mirror element to be used in the .m2/settings.xml file of maven agent pods.
 
+**jenkins_install_plugins**
+
+    adrianjuhl__jenkins_on_openshift4__jenkins_install_plugins: ""
+
+Specifies additional Jenkins plugins to install. Plugins are specified as a comm-delimited list of name:version pairs. For example: `"pipeline-utility-steps:2.12.0,workflow-cps:2660.vb_c0412dc4e6d"`
+
 ## Dependencies
 
 None.
