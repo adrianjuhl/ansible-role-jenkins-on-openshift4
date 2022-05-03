@@ -45,7 +45,7 @@
   changed_when: false
 - name: Configure the jenkins-DeploymentConfig
   ansible.builtin.shell:
-    cmd: "yq eval '.spec.template.spec.containers[] |= select(.name==\"jenkins\").env[] |= select(.name==\"INSTALL_PLUGINS\") |= .value=\"{{ adrianjuhl__jenkins_on_openshift4__jenkins_install_plugins }}\"' | oc apply --filename=- --namespace={{ adrianjuhl__jenkins_on_openshift4__openshift_namespace_jenkins }}"
+    cmd: "yq eval '.spec.template.spec.containers[] |= select(.name==\"jenkins\").env[] |= select(.name==\"INSTALL_PLUGINS\") |= .value=\"{{ adrianjuhl__jenkins_on_openshift4__jenkins_install_plugins }}\" | .spec.triggers[] |= select(.type==\"ImageChange\") |= .imageChangeParams.from.name=\"{{ adrianjuhl__jenkins_on_openshift4__jenkins_source_imagestreamtag_name }}\" | .spec.triggers[] |= select(.type==\"ImageChange\") |= .imageChangeParams.from.namespace=\"{{ adrianjuhl__jenkins_on_openshift4__jenkins_source_imagestreamtag_namespace }}\"' | oc apply --filename=- --namespace={{ adrianjuhl__jenkins_on_openshift4__openshift_namespace_jenkins }}"
   changed_when: false
   args:
     stdin: "{{ lookup('file', 'jenkins-DeploymentConfig.yaml') }}"

@@ -15,3 +15,6 @@ adrianjuhl__jenkins_on_openshift4__maven_settings_server3: "<!-- No server3 is c
 adrianjuhl__jenkins_on_openshift4__maven_settings_mirror: "<!-- No mirror is configured. -->"
 
 adrianjuhl__jenkins_on_openshift4__jenkins_install_plugins: ""
+
+adrianjuhl__jenkins_on_openshift4__jenkins_source_imagestreamtag_name: "jenkins:2"
+adrianjuhl__jenkins_on_openshift4__jenkins_source_imagestreamtag_namespace: "openshift"
