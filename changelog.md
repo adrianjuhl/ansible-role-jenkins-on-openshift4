@@ -1,7 +1,11 @@
 
+### v0.7.0
+
+Introduced the ability to specify the source jenkins-agent-maven image (the ImageStreamTag name and namespace).
+
 ### v0.6.0
 
-Introduced the ability to specify the source jenkins image (the ImageStreamTag name and namespace), giving the ability to lock down the image version and improving the ability to control when a new version is rolled out (if ever).
+Introduced the ability to specify the source jenkins image (the ImageStreamTag name and namespace), giving the ability to lock down the image version and thus control when a new version is rolled out.
 
 ### v0.5.0
 

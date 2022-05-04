@@ -18,3 +18,6 @@ adrianjuhl__jenkins_on_openshift4__jenkins_install_plugins: ""
 
 adrianjuhl__jenkins_on_openshift4__jenkins_source_imagestreamtag_name: "jenkins:2"
 adrianjuhl__jenkins_on_openshift4__jenkins_source_imagestreamtag_namespace: "openshift"
+
+adrianjuhl__jenkins_on_openshift4__jenkins_agent_maven_source_imagestreamtag_name: "jenkins-agent-maven:latest"
+adrianjuhl__jenkins_on_openshift4__jenkins_agent_maven_source_imagestreamtag_namespace: "openshift"

@@ -25,8 +25,8 @@
   args:
     stdin: "{{ lookup('file', 'jenkins-agent-maven-dotm2-directory-PersistentVolumeClaim.yaml') }}"
 - name: Configure the jenkins-agent-maven-ConfigMap
-  ansible.builtin.command:
-    cmd: "oc apply --filename=- --namespace={{ adrianjuhl__jenkins_on_openshift4__openshift_namespace_jenkins }}"
+  ansible.builtin.shell:
+    cmd: "sed 's~image-registry.openshift-image-registry.svc:5000/openshift/jenkins-agent-maven:latest~image-registry.openshift-image-registry.svc:5000/{{ adrianjuhl__jenkins_on_openshift4__jenkins_agent_maven_source_imagestreamtag_namespace }}/{{ adrianjuhl__jenkins_on_openshift4__jenkins_agent_maven_source_imagestreamtag_name }}~g'  | oc apply --filename=- --namespace={{ adrianjuhl__jenkins_on_openshift4__openshift_namespace_jenkins }}"
   changed_when: false
   args:
     stdin: "{{ lookup('file', 'jenkins-agent-maven-ConfigMap.yaml') }}"
