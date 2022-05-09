@@ -11,11 +11,10 @@
     resource_definition:
       metadata:
         annotations:
-          uoa_managed_resource: Do not edit this resource in OpenShift. This resource is maintained in code and managed by an automated process. Edits made in OpenShift will be overwritten.
           haproxy.router.openshift.io/timeout: 4m
           template.openshift.io/expose-uri: http://{.spec.host}{.spec.path}
         labels:
-          app: jenkins-persistent
+          app: jenkins
       spec:
         tls:
           insecureEdgeTerminationPolicy: Redirect
@@ -34,10 +33,8 @@
     state: present
     resource_definition:
       metadata:
-        annotations:
-          uoa_managed_resource: Do not edit this resource in OpenShift. This resource is maintained in code and managed by an automated process. Edits made in OpenShift will be overwritten.
         labels:
-          app: jenkins-persistent
+          app: jenkins
           config.openshift.io/inject-trusted-cabundle: "true"
 
 - name: Determine if the jenkins-PersistentVolumeClaim is already present
@@ -56,10 +53,8 @@
     state: present
     resource_definition:
       metadata:
-        annotations:
-          uoa_managed_resource: Do not edit this resource in OpenShift. This resource is maintained in code and managed by an automated process. Edits made in OpenShift will be overwritten.
         labels:
-          app: jenkins-persistent
+          app: jenkins
       spec:
         accessModes:
           - ReadWriteOnce
@@ -85,10 +80,8 @@
     state: present
     resource_definition:
       metadata:
-        annotations:
-          uoa_managed_resource: Do not edit this resource in OpenShift. This resource is maintained in code and managed by an automated process. Edits made in OpenShift will be overwritten.
         labels:
-          app: jenkins-persistent
+          app: jenkins
       spec:
         accessModes:
           - ReadWriteMany
@@ -107,10 +100,8 @@
     state: present
     resource_definition:
       metadata:
-        annotations:
-          uoa_managed_resource: Do not edit this resource in OpenShift. This resource is maintained in code and managed by an automated process. Edits made in OpenShift will be overwritten.
         labels:
-          app: jenkins-persistent
+          app: jenkins
           role: jenkins-agent
       data:
         maven: |-
@@ -178,8 +169,6 @@
     state: present
     resource_definition:
       metadata:
-        annotations:
-          uoa_managed_resource: Do not edit this resource in OpenShift. This resource is maintained in code and managed by an automated process. Edits made in OpenShift will be overwritten.
       stringData:
         settings_xml: |-
           <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
@@ -204,10 +193,9 @@
     resource_definition:
       metadata:
         annotations:
-          uoa_managed_resource: Do not edit this resource in OpenShift. This resource is maintained in code and managed by an automated process. Edits made in OpenShift will be overwritten.
           template.alpha.openshift.io/wait-for-ready: "true"
         labels:
-          app: jenkins-persistent
+          app: jenkins
       spec:
         replicas: 1
         selector:
@@ -219,7 +207,7 @@
           metadata:
 #            annotations:
 #              openshift.io/generated-by: OpenShiftNewApp
-            creationTimestamp: null
+#            creationTimestamp: null
             labels:
               name: jenkins
           spec:
@@ -333,10 +321,9 @@
     resource_definition:
       metadata:
         annotations:
-          uoa_managed_resource: Do not edit this resource in OpenShift. This resource is maintained in code and managed by an automated process. Edits made in OpenShift will be overwritten.
           serviceaccounts.openshift.io/oauth-redirectreference.jenkins: '{"kind":"OAuthRedirectReference","apiVersion":"v1","reference":{"kind":"Route","name":"jenkins"}}'
         labels:
-          app: jenkins-persistent
+          app: jenkins
 
 - name: Configure the jenkins_edit-RoleBinding
   kubernetes.core.k8s:
@@ -348,10 +335,8 @@
     resource_definition:
       groupNames: null
       metadata:
-        annotations:
-          uoa_managed_resource: Do not edit this resource in OpenShift. This resource is maintained in code and managed by an automated process. Edits made in OpenShift will be overwritten.
         labels:
-          app: jenkins-persistent
+          app: jenkins
       roleRef:
         name: edit
       subjects:
@@ -368,10 +353,8 @@
     state: present
     resource_definition:
       metadata:
-        annotations:
-          uoa_managed_resource: Do not edit this resource in OpenShift. This resource is maintained in code and managed by an automated process. Edits made in OpenShift will be overwritten.
         labels:
-          app: jenkins-persistent
+          app: jenkins
       spec:
         ports:
           - name: agent
@@ -393,11 +376,10 @@
     resource_definition:
       metadata:
         annotations:
-          uoa_managed_resource: Do not edit this resource in OpenShift. This resource is maintained in code and managed by an automated process. Edits made in OpenShift will be overwritten.
           service.alpha.openshift.io/dependencies: '[{"name": "jenkins-jnlp", "namespace": "", "kind": "Service"}]'
           service.openshift.io/infrastructure: "true"
         labels:
-          app: jenkins-persistent
+          app: jenkins
       spec:
         ports:
           - name: web
