@@ -81,6 +81,17 @@
 #  args:
 #    stdin: "{{ lookup('file', 'jenkins-PersistentVolumeClaim.yaml') }}"
 
+- name: Determine if the jenkins-PersistentVolumeClaim is already present
+  kubernetes.core.k8s_info:
+    api_version: v1
+    kind: PersistentVolumeClaim
+    name: jenkins
+    namespace: "{{ adrianjuhl__jenkins_on_openshift4__openshift_namespace_jenkins }}"
+  register: jenkins_pvc_result
+- name: Print jenkins_pvc_result
+  ansible.builtin.debug:
+    msg: "jenkins_pvc_result value is: {{ jenkins_pvc_result }}"
+
 - name: Configure the jenkins-PersistentVolumeClaim
   kubernetes.core.k8s:
     name: jenkins
