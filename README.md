@@ -66,7 +66,7 @@ The namespace that contains the source ImageStream for maven agent pods.
 
 **jenkins_agent_maven_dotm2_directory_pvc_storage_size**
 
-    adrianjuhl__jenkins_on_openshift4__jenkins_agent_maven_dotm2_directory_pvc_storage_size: "2Gi"
+    adrianjuhl__jenkins_on_openshift4__jenkins_agent_maven_dotm2_directory_pvc_storage_size: "1G"
 
 The amount of storage to allocate for use as the .m2 directory on the maven agent pods.
 
