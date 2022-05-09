@@ -461,27 +461,155 @@
 
 
 
+#- name: Configure the jenkins-ServiceAccount
+#  ansible.builtin.command:
+#    cmd: "oc apply --filename=- --namespace={{ adrianjuhl__jenkins_on_openshift4__openshift_namespace_jenkins }}"
+#  changed_when: false
+#  args:
+#    stdin: "{{ lookup('file', 'jenkins-ServiceAccount.yaml') }}"
+
 - name: Configure the jenkins-ServiceAccount
-  ansible.builtin.command:
-    cmd: "oc apply --filename=- --namespace={{ adrianjuhl__jenkins_on_openshift4__openshift_namespace_jenkins }}"
-  changed_when: false
-  args:
-    stdin: "{{ lookup('file', 'jenkins-ServiceAccount.yaml') }}"
+  kubernetes.core.k8s:
+    kind: ServiceAccount
+    api_version: v1
+    name: jenkins
+    namespace: "{{ adrianjuhl__jenkins_on_openshift4__openshift_namespace_jenkins }}"
+    state: present
+    resource_definition:
+#      apiVersion: v1
+#      kind: ServiceAccount
+      metadata:
+        annotations:
+          uoa_managed_resource: Do not edit this resource in OpenShift. This resource is maintained in code and managed by an automated process. Edits made in OpenShift will be overwritten.
+#          openshift.io/generated-by: OpenShiftNewApp
+          serviceaccounts.openshift.io/oauth-redirectreference.jenkins: '{"kind":"OAuthRedirectReference","apiVersion":"v1","reference":{"kind":"Route","name":"jenkins"}}'
+#        creationTimestamp: null
+        labels:
+          app: jenkins-persistent
+#          template: jenkins-persistent-template
+#        name: jenkins
+
+
+
+
+#- name: Configure the jenkins_edit-RoleBinding
+#  ansible.builtin.command:
+#    cmd: "oc apply --filename=- --namespace={{ adrianjuhl__jenkins_on_openshift4__openshift_namespace_jenkins }}"
+#  changed_when: false
+#  args:
+#    stdin: "{{ lookup('file', 'jenkins_edit-RoleBinding.yaml') }}"
+
 - name: Configure the jenkins_edit-RoleBinding
-  ansible.builtin.command:
-    cmd: "oc apply --filename=- --namespace={{ adrianjuhl__jenkins_on_openshift4__openshift_namespace_jenkins }}"
-  changed_when: false
-  args:
-    stdin: "{{ lookup('file', 'jenkins_edit-RoleBinding.yaml') }}"
+  kubernetes.core.k8s:
+    kind: RoleBinding
+    api_version: authorization.openshift.io/v1
+    name: jenkins_edit
+    namespace: "{{ adrianjuhl__jenkins_on_openshift4__openshift_namespace_jenkins }}"
+    state: present
+    resource_definition:
+#      apiVersion: authorization.openshift.io/v1
+      groupNames: null
+#      kind: RoleBinding
+      metadata:
+        annotations:
+          uoa_managed_resource: Do not edit this resource in OpenShift. This resource is maintained in code and managed by an automated process. Edits made in OpenShift will be overwritten.
+#          openshift.io/generated-by: OpenShiftNewApp
+#        creationTimestamp: null
+        labels:
+          app: jenkins-persistent
+#          template: jenkins-persistent-template
+#        name: jenkins_edit
+      roleRef:
+        name: edit
+      subjects:
+        - kind: ServiceAccount
+          name: jenkins
+      userNames: null
+
+
+
+
+#- name: Configure the jenkins-jnlp-Service
+#  ansible.builtin.command:
+#    cmd: "oc apply --filename=- --namespace={{ adrianjuhl__jenkins_on_openshift4__openshift_namespace_jenkins }}"
+#  changed_when: false
+#  args:
+#    stdin: "{{ lookup('file', 'jenkins-jnlp-Service.yaml') }}"
+
 - name: Configure the jenkins-jnlp-Service
-  ansible.builtin.command:
-    cmd: "oc apply --filename=- --namespace={{ adrianjuhl__jenkins_on_openshift4__openshift_namespace_jenkins }}"
-  changed_when: false
-  args:
-    stdin: "{{ lookup('file', 'jenkins-jnlp-Service.yaml') }}"
+  kubernetes.core.k8s:
+    kind: Service
+    api_version: v1
+    name: jenkins-jnlp
+    namespace: "{{ adrianjuhl__jenkins_on_openshift4__openshift_namespace_jenkins }}"
+    state: present
+    resource_definition:
+#      apiVersion: v1
+#      kind: Service
+      metadata:
+        annotations:
+          uoa_managed_resource: Do not edit this resource in OpenShift. This resource is maintained in code and managed by an automated process. Edits made in OpenShift will be overwritten.
+#          openshift.io/generated-by: OpenShiftNewApp
+#        creationTimestamp: null
+        labels:
+          app: jenkins-persistent
+#          template: jenkins-persistent-template
+#        name: jenkins-jnlp
+      spec:
+        ports:
+          - name: agent
+            port: 50000
+            protocol: TCP
+            targetPort: 50000
+        selector:
+          name: jenkins
+        sessionAffinity: None
+        type: ClusterIP
+#      status:
+#        loadBalancer: {}
+
+
+
+#- name: Configure the jenkins-Service
+#  ansible.builtin.command:
+#    cmd: "oc apply --filename=- --namespace={{ adrianjuhl__jenkins_on_openshift4__openshift_namespace_jenkins }}"
+#  changed_when: false
+#  args:
+#    stdin: "{{ lookup('file', 'jenkins-Service.yaml') }}"
+
 - name: Configure the jenkins-Service
-  ansible.builtin.command:
-    cmd: "oc apply --filename=- --namespace={{ adrianjuhl__jenkins_on_openshift4__openshift_namespace_jenkins }}"
-  changed_when: false
-  args:
-    stdin: "{{ lookup('file', 'jenkins-Service.yaml') }}"
+  kubernetes.core.k8s:
+    kind: Service
+    api_version: v1
+    name: jenkins
+    namespace: "{{ adrianjuhl__jenkins_on_openshift4__openshift_namespace_jenkins }}"
+    state: present
+    resource_definition:
+#      apiVersion: v1
+#      kind: Service
+      metadata:
+        annotations:
+          uoa_managed_resource: Do not edit this resource in OpenShift. This resource is maintained in code and managed by an automated process. Edits made in OpenShift will be overwritten.
+#          openshift.io/generated-by: OpenShiftNewApp
+          service.alpha.openshift.io/dependencies: '[{"name": "jenkins-jnlp", "namespace": "", "kind": "Service"}]'
+          service.openshift.io/infrastructure: "true"
+#        creationTimestamp: null
+        labels:
+          app: jenkins-persistent
+#          template: jenkins-persistent-template
+#        name: jenkins
+      spec:
+        ports:
+          - name: web
+            port: 80
+            protocol: TCP
+            targetPort: 8080
+        selector:
+          name: jenkins
+        sessionAffinity: None
+        type: ClusterIP
+#      status:
+#        loadBalancer: {}
+
+
+
