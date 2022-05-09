@@ -83,20 +83,20 @@
 
 - name: Determine if the jenkins-PersistentVolumeClaim is already present
   kubernetes.core.k8s_info:
-    api_version: v1
     kind: PersistentVolumeClaim
+    api_version: v1
     name: jenkins
     namespace: "{{ adrianjuhl__jenkins_on_openshift4__openshift_namespace_jenkins }}"
   register: jenkins_pvc_result
-- name: Print jenkins_pvc_result
-  ansible.builtin.debug:
-    msg: "jenkins_pvc_result value is: {{ jenkins_pvc_result }}"
+#- name: Print jenkins_pvc_result
+#  ansible.builtin.debug:
+#    msg: "jenkins_pvc_result value is: {{ jenkins_pvc_result }}"
 
 - name: Configure the jenkins-PersistentVolumeClaim
   kubernetes.core.k8s:
-    name: jenkins
     kind: PersistentVolumeClaim
     api_version: v1
+    name: jenkins
     namespace: "{{ adrianjuhl__jenkins_on_openshift4__openshift_namespace_jenkins }}"
     state: present
     resource_definition:
@@ -122,18 +122,144 @@
   when: jenkins_pvc_result.resources | length == 0
 
 
+#- name: Configure the jenkins-agent-maven-dotm2-directory-PersistentVolumeClaim
+#  ansible.builtin.shell:
+#    cmd: "yq eval '.spec.resources.requests.storage=\"{{ adrianjuhl__jenkins_on_openshift4__jenkins_agent_maven_dotm2_directory_pvc_storage_size }}\" | .spec.storageClassName=\"{{ adrianjuhl__jenkins_on_openshift4__jenkins_agent_maven_dotm2_directory_pvc_storage_class_name }}\"' | oc apply --filename=- --namespace={{ adrianjuhl__jenkins_on_openshift4__openshift_namespace_jenkins }}"
+#  changed_when: false
+#  args:
+#    stdin: "{{ lookup('file', 'jenkins-agent-maven-dotm2-directory-PersistentVolumeClaim.yaml') }}"
+
+- name: Determine if the jenkins-agent-maven-dotm2-directory-PersistentVolumeClaim is already present
+  kubernetes.core.k8s_info:
+    kind: PersistentVolumeClaim
+    api_version: v1
+    name: jenkins-agent-maven-dotm2-directory
+    namespace: "{{ adrianjuhl__jenkins_on_openshift4__openshift_namespace_jenkins }}"
+  register: jenkins_agent_maven_dotm2_directory_pvc_result
+
 - name: Configure the jenkins-agent-maven-dotm2-directory-PersistentVolumeClaim
-  ansible.builtin.shell:
-    cmd: "yq eval '.spec.resources.requests.storage=\"{{ adrianjuhl__jenkins_on_openshift4__jenkins_agent_maven_dotm2_directory_pvc_storage_size }}\" | .spec.storageClassName=\"{{ adrianjuhl__jenkins_on_openshift4__jenkins_agent_maven_dotm2_directory_pvc_storage_class_name }}\"' | oc apply --filename=- --namespace={{ adrianjuhl__jenkins_on_openshift4__openshift_namespace_jenkins }}"
-  changed_when: false
-  args:
-    stdin: "{{ lookup('file', 'jenkins-agent-maven-dotm2-directory-PersistentVolumeClaim.yaml') }}"
+  kubernetes.core.k8s:
+    kind: PersistentVolumeClaim
+    api_version: v1
+    name: jenkins-agent-maven-dotm2-directory
+    namespace: "{{ adrianjuhl__jenkins_on_openshift4__openshift_namespace_jenkins }}"
+    state: present
+    resource_definition:
+#      kind: PersistentVolumeClaim
+#      apiVersion: v1
+      metadata:
+        annotations:
+          uoa_managed_resource: Do not edit this resource in OpenShift. This resource is maintained in code and managed by an automated process. Edits made in OpenShift will be overwritten.
+#          openshift.io/generated-by: OpenShiftNewApp
+#        creationTimestamp: null
+        labels:
+          app: jenkins-persistent
+#          template: jenkins-persistent-template
+#        name: jenkins-agent-maven-dotm2-directory
+      spec:
+        accessModes:
+          - ReadWriteMany
+        resources:
+          requests:
+            storage: "{{ adrianjuhl__jenkins_on_openshift4__jenkins_agent_maven_dotm2_directory_pvc_storage_size }}"
+        storageClassName: "{{ adrianjuhl__jenkins_on_openshift4__jenkins_agent_maven_dotm2_directory_pvc_storage_class_name }}"
+  when: jenkins_agent_maven_dotm2_directory_pvc_result.resources | length == 0
+
+
+
+
+
+
+#- name: Configure the jenkins-agent-maven-ConfigMap
+#  ansible.builtin.shell:
+#    cmd: "sed 's~image-registry.openshift-image-registry.svc:5000/openshift/jenkins-agent-maven:latest~image-registry.openshift-image-registry.svc:5000/{{ adrianjuhl__jenkins_on_openshift4__jenkins_agent_maven_source_imagestreamtag_namespace }}/{{ adrianjuhl__jenkins_on_openshift4__jenkins_agent_maven_source_imagestreamtag_name }}~g'  | oc apply --filename=- --namespace={{ adrianjuhl__jenkins_on_openshift4__openshift_namespace_jenkins }}"
+#  changed_when: false
+#  args:
+#    stdin: "{{ lookup('file', 'jenkins-agent-maven-ConfigMap.yaml') }}"
+
 - name: Configure the jenkins-agent-maven-ConfigMap
-  ansible.builtin.shell:
-    cmd: "sed 's~image-registry.openshift-image-registry.svc:5000/openshift/jenkins-agent-maven:latest~image-registry.openshift-image-registry.svc:5000/{{ adrianjuhl__jenkins_on_openshift4__jenkins_agent_maven_source_imagestreamtag_namespace }}/{{ adrianjuhl__jenkins_on_openshift4__jenkins_agent_maven_source_imagestreamtag_name }}~g'  | oc apply --filename=- --namespace={{ adrianjuhl__jenkins_on_openshift4__openshift_namespace_jenkins }}"
-  changed_when: false
-  args:
-    stdin: "{{ lookup('file', 'jenkins-agent-maven-ConfigMap.yaml') }}"
+  kubernetes.core.k8s:
+    kind: ConfigMap
+    api_version: v1
+    name: jenkins-agent-maven
+    namespace: "{{ adrianjuhl__jenkins_on_openshift4__openshift_namespace_jenkins }}"
+    state: present
+    resource_definition:
+#      apiVersion: v1
+#      kind: ConfigMap
+      metadata:
+#        name: jenkins-agent-maven
+        annotations:
+          uoa_managed_resource: Do not edit this resource in OpenShift. This resource is maintained in code and managed by an automated process. Edits made in OpenShift will be overwritten.
+#          openshift.io/generated-by: OpenShiftNewApp
+#        creationTimestamp: null
+        labels:
+          app: jenkins-persistent
+#          template: jenkins-persistent-template
+          role: jenkins-agent
+      data:
+        maven: |-
+          <org.csanchez.jenkins.plugins.kubernetes.PodTemplate>
+            <name>maven</name>
+            <privileged>false</privileged>
+            <capOnlyOnAlivePods>false</capOnlyOnAlivePods>
+            <alwaysPullImage>false</alwaysPullImage>
+            <instanceCap>2147483647</instanceCap>
+            <slaveConnectTimeout>1000</slaveConnectTimeout>
+            <idleMinutes>0</idleMinutes>
+            <activeDeadlineSeconds>0</activeDeadlineSeconds>
+            <label>maven</label>
+            <serviceAccount>jenkins</serviceAccount>
+            <hostNetwork>false</hostNetwork>
+            <volumes>
+              <org.csanchez.jenkins.plugins.kubernetes.volumes.PersistentVolumeClaim>
+                <mountPath>/home/jenkins/.m2</mountPath>
+                <claimName>jenkins-agent-maven-dotm2-directory</claimName>
+                <readOnly>false</readOnly>
+              </org.csanchez.jenkins.plugins.kubernetes.volumes.PersistentVolumeClaim>
+            </volumes>
+            <containers>
+              <org.csanchez.jenkins.plugins.kubernetes.ContainerTemplate>
+                <name>jnlp</name>
+                <image>image-registry.openshift-image-registry.svc:5000/{{ adrianjuhl__jenkins_on_openshift4__jenkins_agent_maven_source_imagestreamtag_namespace }}/{{ adrianjuhl__jenkins_on_openshift4__jenkins_agent_maven_source_imagestreamtag_name }}</image>
+                <privileged>false</privileged>
+                <alwaysPullImage>true</alwaysPullImage>
+                <workingDir>/tmp</workingDir>
+                <command></command>
+                <args>${computer.jnlpmac} ${computer.name}</args>
+                <ttyEnabled>false</ttyEnabled>
+                <resourceRequestCpu></resourceRequestCpu>
+                <resourceRequestMemory></resourceRequestMemory>
+                <resourceRequestEphemeralStorage></resourceRequestEphemeralStorage>
+                <resourceLimitCpu></resourceLimitCpu>
+                <resourceLimitMemory>1Gi</resourceLimitMemory>
+                <resourceLimitEphemeralStorage></resourceLimitEphemeralStorage>
+                <envVars/>
+                <ports/>
+                <livenessProbe>
+                  <execArgs></execArgs>
+                  <timeoutSeconds>0</timeoutSeconds>
+                  <initialDelaySeconds>0</initialDelaySeconds>
+                  <failureThreshold>0</failureThreshold>
+                  <periodSeconds>0</periodSeconds>
+                  <successThreshold>0</successThreshold>
+                </livenessProbe>
+              </org.csanchez.jenkins.plugins.kubernetes.ContainerTemplate>
+            </containers>
+            <envVars/>
+            <annotations/>
+            <imagePullSecrets/>
+            <nodeProperties/>
+            <yamlMergeStrategy class="org.csanchez.jenkins.plugins.kubernetes.pod.yaml.Overrides"/>
+            <showRawYaml>true</showRawYaml>
+          </org.csanchez.jenkins.plugins.kubernetes.PodTemplate>
+
+
+
+
+
+
+
 - name: Configure the jenkins-agent-maven-dotm2-settings-xml-Secret - build file content
   set_fact:
     adrianjuhl__jenkins_on_openshift4__maven_settings_xml_file_content: "{{
@@ -143,6 +269,11 @@
         | replace('<!-- SERVER3_CONFIG -->', adrianjuhl__jenkins_on_openshift4__maven_settings_server3)
         | replace('<!-- MIRROR_CONFIG -->', adrianjuhl__jenkins_on_openshift4__maven_settings_mirror)
       }}"
+
+
+
+
+
 - name: Configure the jenkins-agent-maven-dotm2-settings-xml-Secret - from file content
   ansible.builtin.shell:
     cmd: "oc create secret generic jenkins-agent-maven-dotm2-settings-xml --from-literal=settings_xml='{{ adrianjuhl__jenkins_on_openshift4__maven_settings_xml_file_content }}' --dry-run=client --output=yaml --save-config | yq eval 'del(.metadata.annotations)' | oc apply --filename=- --namespace={{ adrianjuhl__jenkins_on_openshift4__openshift_namespace_jenkins }}"
