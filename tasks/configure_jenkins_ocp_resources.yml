@@ -10,7 +10,7 @@
 
 - name: Configure the jenkins-Route
   kubernetes.core.k8s:
-    name: active-integration-jenkins-namespace
+    name: jenkins
     kind: Route
     api_version: route.openshift.io/v1
     namespace: "{{ adrianjuhl__jenkins_on_openshift4__openshift_namespace_jenkins }}"
@@ -22,13 +22,13 @@
         annotations:
           uoa_managed_resource: Do not edit this resource in OpenShift. This resource is maintained in code and managed by an automated process. Edits made in OpenShift will be overwritten.
           haproxy.router.openshift.io/timeout: 4m
-          openshift.io/generated-by: OpenShiftNewApp
+#          openshift.io/generated-by: OpenShiftNewApp
           template.openshift.io/expose-uri: http://{.spec.host}{.spec.path}
 #        creationTimestamp: null
         labels:
           app: jenkins-persistent
 #          template: jenkins-persistent-template
-        name: jenkins
+#        name: jenkins
       spec:
         tls:
           insecureEdgeTerminationPolicy: Redirect
@@ -37,23 +37,80 @@
           kind: Service
           name: jenkins
           weight: null
-      status: {}
+#      status: {}
 
 
 
+
+#- name: Configure the jenkins-trusted-ca-bundle-ConfigMap
+#  ansible.builtin.command:
+#    cmd: "oc apply --filename=- --namespace={{ adrianjuhl__jenkins_on_openshift4__openshift_namespace_jenkins }}"
+#  changed_when: false
+#  args:
+#    stdin: "{{ lookup('file', 'jenkins-trusted-ca-bundle-ConfigMap.yaml') }}"
 
 - name: Configure the jenkins-trusted-ca-bundle-ConfigMap
-  ansible.builtin.command:
-    cmd: "oc apply --filename=- --namespace={{ adrianjuhl__jenkins_on_openshift4__openshift_namespace_jenkins }}"
-  changed_when: false
-  args:
-    stdin: "{{ lookup('file', 'jenkins-trusted-ca-bundle-ConfigMap.yaml') }}"
+  kubernetes.core.k8s:
+    name: jenkins-trusted-ca-bundle
+    kind: ConfigMap
+    api_version: v1
+    namespace: "{{ adrianjuhl__jenkins_on_openshift4__openshift_namespace_jenkins }}"
+    state: present
+    resource_definition:
+#      apiVersion: v1
+#      kind: ConfigMap
+      metadata:
+        annotations:
+          uoa_managed_resource: Do not edit this resource in OpenShift. This resource is maintained in code and managed by an automated process. Edits made in OpenShift will be overwritten.
+#          openshift.io/generated-by: OpenShiftNewApp
+#        creationTimestamp: null
+        labels:
+          app: jenkins-persistent
+          config.openshift.io/inject-trusted-cabundle: "true"
+#          template: jenkins-persistent-template
+#        name: jenkins-trusted-ca-bundle
+
+
+
+
+
+#- name: Configure the jenkins-PersistentVolumeClaim
+#  ansible.builtin.shell:
+#    cmd: "yq eval '.spec.resources.requests.storage=\"{{ adrianjuhl__jenkins_on_openshift4__jenkins_pvc_storage_size }}\" | .spec.storageClassName=\"{{ adrianjuhl__jenkins_on_openshift4__jenkins_pvc_storage_class_name }}\"' | oc apply --filename=- --namespace={{ adrianjuhl__jenkins_on_openshift4__openshift_namespace_jenkins }}"
+#  changed_when: false
+#  args:
+#    stdin: "{{ lookup('file', 'jenkins-PersistentVolumeClaim.yaml') }}"
+
 - name: Configure the jenkins-PersistentVolumeClaim
-  ansible.builtin.shell:
-    cmd: "yq eval '.spec.resources.requests.storage=\"{{ adrianjuhl__jenkins_on_openshift4__jenkins_pvc_storage_size }}\" | .spec.storageClassName=\"{{ adrianjuhl__jenkins_on_openshift4__jenkins_pvc_storage_class_name }}\"' | oc apply --filename=- --namespace={{ adrianjuhl__jenkins_on_openshift4__openshift_namespace_jenkins }}"
-  changed_when: false
-  args:
-    stdin: "{{ lookup('file', 'jenkins-PersistentVolumeClaim.yaml') }}"
+  kubernetes.core.k8s:
+    name: jenkins
+    kind: PersistentVolumeClaim
+    api_version: v1
+    namespace: "{{ adrianjuhl__jenkins_on_openshift4__openshift_namespace_jenkins }}"
+    state: present
+    resource_definition:
+#      apiVersion: v1
+#      kind: PersistentVolumeClaim
+      metadata:
+        annotations:
+          uoa_managed_resource: Do not edit this resource in OpenShift. This resource is maintained in code and managed by an automated process. Edits made in OpenShift will be overwritten.
+#          openshift.io/generated-by: OpenShiftNewApp
+#        creationTimestamp: null
+        labels:
+          app: jenkins-persistent
+#          template: jenkins-persistent-template
+#        name: jenkins
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: "{{ adrianjuhl__jenkins_on_openshift4__jenkins_pvc_storage_size }}"
+        storageClassName: "{{ adrianjuhl__jenkins_on_openshift4__openshift_namespace_jenkins }}"
+#      status: {}
+
+
+
 - name: Configure the jenkins-agent-maven-dotm2-directory-PersistentVolumeClaim
   ansible.builtin.shell:
     cmd: "yq eval '.spec.resources.requests.storage=\"{{ adrianjuhl__jenkins_on_openshift4__jenkins_agent_maven_dotm2_directory_pvc_storage_size }}\" | .spec.storageClassName=\"{{ adrianjuhl__jenkins_on_openshift4__jenkins_agent_maven_dotm2_directory_pvc_storage_class_name }}\"' | oc apply --filename=- --namespace={{ adrianjuhl__jenkins_on_openshift4__openshift_namespace_jenkins }}"
