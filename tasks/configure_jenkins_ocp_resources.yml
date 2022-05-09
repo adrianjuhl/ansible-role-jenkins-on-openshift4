@@ -307,154 +307,154 @@
 
 
 
-#- name: Configure the jenkins-DeploymentConfig
-#  ansible.builtin.shell:
-#    cmd: "yq eval '.spec.template.spec.containers[] |= select(.name==\"jenkins\").env[] |= select(.name==\"INSTALL_PLUGINS\") |= .value=\"{{ adrianjuhl__jenkins_on_openshift4__jenkins_install_plugins }}\" | .spec.triggers[] |= select(.type==\"ImageChange\") |= .imageChangeParams.from.name=\"{{ adrianjuhl__jenkins_on_openshift4__jenkins_source_imagestreamtag_name }}\" | .spec.triggers[] |= select(.type==\"ImageChange\") |= .imageChangeParams.from.namespace=\"{{ adrianjuhl__jenkins_on_openshift4__jenkins_source_imagestreamtag_namespace }}\"' | oc apply --filename=- --namespace={{ adrianjuhl__jenkins_on_openshift4__openshift_namespace_jenkins }}"
-#  changed_when: false
-#  args:
-#    stdin: "{{ lookup('file', 'jenkins-DeploymentConfig.yaml') }}"
-
 - name: Configure the jenkins-DeploymentConfig
-  kubernetes.core.k8s:
-    kind: DeploymentConfig
-    api_version: apps.openshift.io/v1
-    name: jenkins
-    namespace: "{{ adrianjuhl__jenkins_on_openshift4__openshift_namespace_jenkins }}"
-    state: present
-    resource_definition:
-#      apiVersion: apps.openshift.io/v1
-#      kind: DeploymentConfig
-      metadata:
-        annotations:
-          uoa_managed_resource: Do not edit this resource in OpenShift. This resource is maintained in code and managed by an automated process. Edits made in OpenShift will be overwritten.
-#          openshift.io/generated-by: OpenShiftNewApp
-          template.alpha.openshift.io/wait-for-ready: "true"
-#        creationTimestamp: null
-        labels:
-          app: jenkins-persistent
-#          template: jenkins-persistent-template
-#        name: jenkins
-      spec:
-        replicas: 1
-        selector:
-          name: jenkins
-        strategy:
-          resources: {}
-          type: Recreate
-        template:
-          metadata:
-            annotations:
-              openshift.io/generated-by: OpenShiftNewApp
-            creationTimestamp: null
-            labels:
-              name: jenkins
-          spec:
-            containers:
-              - name: jenkins
-                env:
-                  - name: OPENSHIFT_ENABLE_OAUTH
-                    value: "true"
-                  - name: OPENSHIFT_ENABLE_REDIRECT_PROMPT
-                    value: "true"
-                  - name: DISABLE_ADMINISTRATIVE_MONITORS
-                    value: "false"
-                  - name: KUBERNETES_MASTER
-                    value: https://kubernetes.default:443
-                  - name: KUBERNETES_TRUST_CERTIFICATES
-                    value: "true"
-                  - name: JENKINS_SERVICE_NAME
-                    value: jenkins
-                  - name: JNLP_SERVICE_NAME
-                    value: jenkins-jnlp
-                  - name: ENABLE_FATAL_ERROR_LOG_FILE
-                    value: "false"
-                  - name: JENKINS_UC_INSECURE
-                    value: "false"
-                  - name: CASC_JENKINS_CONFIG
-                    value: /var/lib/jenkins/proxy.yaml
-                  - name: INSTALL_PLUGINS
-                    value: "{{ adrianjuhl__jenkins_on_openshift4__jenkins_install_plugins }}"
-                image: ' '
-                imagePullPolicy: IfNotPresent
-                livenessProbe:
-                  failureThreshold: 2
-                  httpGet:
-                    path: /login
-                    port: 8080
-                  initialDelaySeconds: 420
-                  periodSeconds: 360
-                  timeoutSeconds: 240
-                readinessProbe:
-                  httpGet:
-                    path: /login
-                    port: 8080
-                  initialDelaySeconds: 3
-                  timeoutSeconds: 240
-                resources:
-                  limits:
-                    memory: 1Gi
-                securityContext:
-                  capabilities: {}
-                  privileged: false
-                terminationMessagePath: /dev/termination-log
-                volumeMounts:
-                  - mountPath: /var/lib/jenkins
-                    name: jenkins-data
-                  - mountPath: /etc/pki/ca-trust/source/anchors
-                    name: jenkins-trusted-ca-bundle
-            initContainers:
-              - name: configure-jenkins-agent-maven-dotm2-settings-xml-file
-                image: ' '
-                imagePullPolicy: IfNotPresent
-                command: ['sh']
-                args:
-                  - -c
-                  - >-
-                      echo Copying settings.xml into place ... &&
-                      cp /jenkins-agent-maven-dotm2-settings-xml/settings_xml /jenkins-agent-maven-dotm2-directory/settings.xml &&
-                      echo Done
-                volumeMounts:
-                  - mountPath: /jenkins-agent-maven-dotm2-directory
-                    name: jenkins-agent-maven-dotm2-directory
-                  - mountPath: /jenkins-agent-maven-dotm2-settings-xml
-                    name: jenkins-agent-maven-dotm2-settings-xml
-            dnsPolicy: ClusterFirst
-            restartPolicy: Always
-            serviceAccountName: jenkins
-            volumes:
-              - name: jenkins-data
-                persistentVolumeClaim:
-                  claimName: jenkins
-              - configMap:
-                  name: jenkins-trusted-ca-bundle
-                  optional: true
-                name: jenkins-trusted-ca-bundle
-              - name: jenkins-agent-maven-dotm2-directory
-                persistentVolumeClaim:
-                  claimName: jenkins-agent-maven-dotm2-directory
-              - name: jenkins-agent-maven-dotm2-settings-xml
-                secret:
-                  secretName: jenkins-agent-maven-dotm2-settings-xml
-        test: false
-        triggers:
-          - type: ImageChange
-            imageChangeParams:
-              automatic: true
-              containerNames:
-                - jenkins
-                - configure-jenkins-agent-maven-dotm2-settings-xml-file
-              from:
-                kind: ImageStreamTag
-                name: "{{ adrianjuhl__jenkins_on_openshift4__jenkins_source_imagestreamtag_name }}"
-                namespace: "{{ adrianjuhl__jenkins_on_openshift4__jenkins_source_imagestreamtag_namespace }}"
-          - type: ConfigChange
-#      status:
-#        availableReplicas: 0
-#        latestVersion: 0
-#        observedGeneration: 0
-#        replicas: 0
-#        unavailableReplicas: 0
-#        updatedReplicas: 0
+  ansible.builtin.shell:
+    cmd: "yq eval '.spec.template.spec.containers[] |= select(.name==\"jenkins\").env[] |= select(.name==\"INSTALL_PLUGINS\") |= .value=\"{{ adrianjuhl__jenkins_on_openshift4__jenkins_install_plugins }}\" | .spec.triggers[] |= select(.type==\"ImageChange\") |= .imageChangeParams.from.name=\"{{ adrianjuhl__jenkins_on_openshift4__jenkins_source_imagestreamtag_name }}\" | .spec.triggers[] |= select(.type==\"ImageChange\") |= .imageChangeParams.from.namespace=\"{{ adrianjuhl__jenkins_on_openshift4__jenkins_source_imagestreamtag_namespace }}\"' | oc apply --filename=- --namespace={{ adrianjuhl__jenkins_on_openshift4__openshift_namespace_jenkins }}"
+  changed_when: false
+  args:
+    stdin: "{{ lookup('file', 'jenkins-DeploymentConfig.yaml') }}"
+
+#- name: Configure the jenkins-DeploymentConfig
+#  kubernetes.core.k8s:
+#    kind: DeploymentConfig
+#    api_version: apps.openshift.io/v1
+#    name: jenkins
+#    namespace: "{{ adrianjuhl__jenkins_on_openshift4__openshift_namespace_jenkins }}"
+#    state: present
+#    resource_definition:
+##      apiVersion: apps.openshift.io/v1
+##      kind: DeploymentConfig
+#      metadata:
+#        annotations:
+#          uoa_managed_resource: Do not edit this resource in OpenShift. This resource is maintained in code and managed by an automated process. Edits made in OpenShift will be overwritten.
+##          openshift.io/generated-by: OpenShiftNewApp
+#          template.alpha.openshift.io/wait-for-ready: "true"
+##        creationTimestamp: null
+#        labels:
+#          app: jenkins-persistent
+##          template: jenkins-persistent-template
+##        name: jenkins
+#      spec:
+#        replicas: 1
+#        selector:
+#          name: jenkins
+#        strategy:
+#          resources: {}
+#          type: Recreate
+#        template:
+#          metadata:
+#            annotations:
+#              openshift.io/generated-by: OpenShiftNewApp
+#            creationTimestamp: null
+#            labels:
+#              name: jenkins
+#          spec:
+#            containers:
+#              - name: jenkins
+#                env:
+#                  - name: OPENSHIFT_ENABLE_OAUTH
+#                    value: "true"
+#                  - name: OPENSHIFT_ENABLE_REDIRECT_PROMPT
+#                    value: "true"
+#                  - name: DISABLE_ADMINISTRATIVE_MONITORS
+#                    value: "false"
+#                  - name: KUBERNETES_MASTER
+#                    value: https://kubernetes.default:443
+#                  - name: KUBERNETES_TRUST_CERTIFICATES
+#                    value: "true"
+#                  - name: JENKINS_SERVICE_NAME
+#                    value: jenkins
+#                  - name: JNLP_SERVICE_NAME
+#                    value: jenkins-jnlp
+#                  - name: ENABLE_FATAL_ERROR_LOG_FILE
+#                    value: "false"
+#                  - name: JENKINS_UC_INSECURE
+#                    value: "false"
+#                  - name: CASC_JENKINS_CONFIG
+#                    value: /var/lib/jenkins/proxy.yaml
+#                  - name: INSTALL_PLUGINS
+#                    value: "{{ adrianjuhl__jenkins_on_openshift4__jenkins_install_plugins }}"
+#                image: ' '
+#                imagePullPolicy: IfNotPresent
+#                livenessProbe:
+#                  failureThreshold: 2
+#                  httpGet:
+#                    path: /login
+#                    port: 8080
+#                  initialDelaySeconds: 420
+#                  periodSeconds: 360
+#                  timeoutSeconds: 240
+#                readinessProbe:
+#                  httpGet:
+#                    path: /login
+#                    port: 8080
+#                  initialDelaySeconds: 3
+#                  timeoutSeconds: 240
+#                resources:
+#                  limits:
+#                    memory: 1Gi
+#                securityContext:
+#                  capabilities: {}
+#                  privileged: false
+#                terminationMessagePath: /dev/termination-log
+#                volumeMounts:
+#                  - mountPath: /var/lib/jenkins
+#                    name: jenkins-data
+#                  - mountPath: /etc/pki/ca-trust/source/anchors
+#                    name: jenkins-trusted-ca-bundle
+#            initContainers:
+#              - name: configure-jenkins-agent-maven-dotm2-settings-xml-file
+#                image: ' '
+#                imagePullPolicy: IfNotPresent
+#                command: ['sh']
+#                args:
+#                  - -c
+#                  - >-
+#                      echo Copying settings.xml into place ... &&
+#                      cp /jenkins-agent-maven-dotm2-settings-xml/settings_xml /jenkins-agent-maven-dotm2-directory/settings.xml &&
+#                      echo Done
+#                volumeMounts:
+#                  - mountPath: /jenkins-agent-maven-dotm2-directory
+#                    name: jenkins-agent-maven-dotm2-directory
+#                  - mountPath: /jenkins-agent-maven-dotm2-settings-xml
+#                    name: jenkins-agent-maven-dotm2-settings-xml
+#            dnsPolicy: ClusterFirst
+#            restartPolicy: Always
+#            serviceAccountName: jenkins
+#            volumes:
+#              - name: jenkins-data
+#                persistentVolumeClaim:
+#                  claimName: jenkins
+#              - configMap:
+#                  name: jenkins-trusted-ca-bundle
+#                  optional: true
+#                name: jenkins-trusted-ca-bundle
+#              - name: jenkins-agent-maven-dotm2-directory
+#                persistentVolumeClaim:
+#                  claimName: jenkins-agent-maven-dotm2-directory
+#              - name: jenkins-agent-maven-dotm2-settings-xml
+#                secret:
+#                  secretName: jenkins-agent-maven-dotm2-settings-xml
+#        test: false
+#        triggers:
+#          - type: ImageChange
+#            imageChangeParams:
+#              automatic: true
+#              containerNames:
+#                - jenkins
+#                - configure-jenkins-agent-maven-dotm2-settings-xml-file
+#              from:
+#                kind: ImageStreamTag
+#                name: "{{ adrianjuhl__jenkins_on_openshift4__jenkins_source_imagestreamtag_name }}"
+#                namespace: "{{ adrianjuhl__jenkins_on_openshift4__jenkins_source_imagestreamtag_namespace }}"
+#          - type: ConfigChange
+##      status:
+##        availableReplicas: 0
+##        latestVersion: 0
+##        observedGeneration: 0
+##        replicas: 0
+##        unavailableReplicas: 0
+##        updatedReplicas: 0
 
 
 
