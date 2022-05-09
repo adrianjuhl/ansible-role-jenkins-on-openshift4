@@ -1,4 +1,8 @@
 
+### v1.0.0
+
+[kubernetes.core](https://docs.ansible.com/ansible/latest/collections/kubernetes/core/index.html) Ansible collection.
+
 ### v0.3.0
 
 The .m2/settings.xml file for maven is copied into place using initContainers config in the DeploymentConfig for jenkins. See [Init Containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/) kubernetes documentation.

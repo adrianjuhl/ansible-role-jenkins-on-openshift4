@@ -1,4 +1,9 @@
 
+### v1.0.0
+
+ - Switched to use the kubernetes.core.k8s ansible module to configure resources, rather than use 'oc apply'.
+ - Switched to use ansible features to apply parameterized configuration, rather than use search and replace techniques with tools such as yq and sed.
+
 ### v0.7.0
 
 Introduced the ability to specify the source jenkins-agent-maven image (the ImageStreamTag name and namespace).
