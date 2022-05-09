@@ -1,6 +1,6 @@
 # Ansible role: jenkins_on_openshift4
 
-Installs Jenkins into an OpenShift 4 namespace.
+Configures Jenkins in an OpenShift 4 namespace.
 
 ## Requirements
 
