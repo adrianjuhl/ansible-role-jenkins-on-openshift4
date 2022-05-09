@@ -1,5 +1,5 @@
 ---
-# Ensure that the oc client is currently connected to the expected openshift server and project
+# Ensure that the oc client is currently connected to the expected openshift server
 - name: Verify that the oc client is currently connected to the expected server
   ansible.builtin.command:
     cmd: oc whoami --show-server
@@ -10,12 +10,3 @@
   ansible.builtin.fail:
     msg: "The oc client is not connected to the expected server (current: {{ adrianjuhl__jenkins_on_openshift4__current_openshift_server_url.stdout }}, expected: {{ adrianjuhl__jenkins_on_openshift4__openshift_server_url }})"
   when: adrianjuhl__jenkins_on_openshift4__current_openshift_server_url.stdout != adrianjuhl__jenkins_on_openshift4__openshift_server_url
-- name: Verify that the oc client is currently connected to the exprected project
-  ansible.builtin.command:
-    cmd: "oc project --short=true"
-  changed_when: false
-  register: adrianjuhl__jenkins_on_openshift4__current_openshift_project
-- name: Exit if the project currently connected to is not the expected one
-  ansible.builtin.fail:
-    msg: "The oc client is not connected to the excpected project (current: {{ adrianjuhl__jenkins_on_openshift4__current_openshift_project.stdout }}, expected: {{ adrianjuhl__jenkins_on_openshift4__openshift_namespace_jenkins }})"
-  when: adrianjuhl__jenkins_on_openshift4__current_openshift_project.stdout != adrianjuhl__jenkins_on_openshift4__openshift_namespace_jenkins
