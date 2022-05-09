@@ -22,6 +22,18 @@ The REST API URL of the OpenShift4 server on which Jenkins is to be configured.
 
 The name of the namespace in which Jenkins is to be configured.
 
+**jenkins_source_imagestreamtag_name**
+
+    adrianjuhl__jenkins_on_openshift4__jenkins_source_imagestreamtag_name: "jenkins:2"
+
+The name of the the ImageStreamTag to identify the source image for jenkins.
+
+**jenkins_source_imagestreamtag_namespace**
+
+    adrianjuhl__jenkins_on_openshift4__jenkins_source_imagestreamtag_namespace: "openshift"
+
+The namespace that contains the source ImageStream for jenkins.
+
 **jenkins_pvc_storage_size**
 
     adrianjuhl__jenkins_on_openshift4__jenkins_pvc_storage_size: "1G"
@@ -33,6 +45,24 @@ The amount of storage to allocate for Jenkins own application and data.
     adrianjuhl__jenkins_on_openshift4__jenkins_pvc_storage_class_name: ""
 
 The storage class to use for the storage for Jenkins.
+
+**jenkins_install_plugins**
+
+    adrianjuhl__jenkins_on_openshift4__jenkins_install_plugins: ""
+
+Specifies additional Jenkins plugins to install. Plugins are specified as a comm-delimited list of name:version pairs. For example: `"pipeline-utility-steps:2.12.0,workflow-cps:2660.vb_c0412dc4e6d"`
+
+**jenkins_agent_maven_source_imagestreamtag_name**
+
+    adrianjuhl__jenkins_on_openshift4__jenkins_agent_maven_source_imagestreamtag_name: "jenkins-agent-maven:latest"
+
+The name of the the ImageStreamTag to identify the source image for maven agent pods.
+
+**jenkins_agent_maven_source_imagestreamtag_namespace**
+
+    adrianjuhl__jenkins_on_openshift4__jenkins_agent_maven_source_imagestreamtag_namespace: "openshift"
+
+The namespace that contains the source ImageStream for maven agent pods.
 
 **jenkins_agent_maven_dotm2_directory_pvc_storage_size**
 
@@ -69,36 +99,6 @@ The server element (third of up to three) to be used in the .m2/settings.xml fil
     adrianjuhl__jenkins_on_openshift4__maven_settings_mirror: "<!-- No mirror is configured. -->"
 
 The mirror element to be used in the .m2/settings.xml file of maven agent pods.
-
-**jenkins_install_plugins**
-
-    adrianjuhl__jenkins_on_openshift4__jenkins_install_plugins: ""
-
-Specifies additional Jenkins plugins to install. Plugins are specified as a comm-delimited list of name:version pairs. For example: `"pipeline-utility-steps:2.12.0,workflow-cps:2660.vb_c0412dc4e6d"`
-
-**jenkins_source_imagestreamtag_name**
-
-    adrianjuhl__jenkins_on_openshift4__jenkins_source_imagestreamtag_name: "jenkins:2"
-
-The name of the the ImageStreamTag to identify the source image for jenkins.
-
-**jenkins_source_imagestreamtag_namespace**
-
-    adrianjuhl__jenkins_on_openshift4__jenkins_source_imagestreamtag_namespace: "openshift"
-
-The namespace that contains the source ImageStream for jenkins.
-
-**jenkins_agent_maven_source_imagestreamtag_name**
-
-    adrianjuhl__jenkins_on_openshift4__jenkins_agent_maven_source_imagestreamtag_name: "jenkins-agent-maven:latest"
-
-The name of the the ImageStreamTag to identify the source image for maven agent pods.
-
-**jenkins_agent_maven_source_imagestreamtag_namespace**
-
-    adrianjuhl__jenkins_on_openshift4__jenkins_agent_maven_source_imagestreamtag_namespace: "openshift"
-
-The namespace that contains the source ImageStream for maven agent pods.
 
 ## Dependencies
 
