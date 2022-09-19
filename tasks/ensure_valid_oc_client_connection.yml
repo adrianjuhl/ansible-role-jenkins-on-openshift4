@@ -3,6 +3,7 @@
 - name: Verify that the oc client is currently connected to the expected server
   ansible.builtin.command:
     cmd: oc whoami --show-server
+  check_mode: false  # run task always (regardless of whether the '--check' parameter is used)
   changed_when: false
   ignore_errors: true
   register: adrianjuhl__jenkins_on_openshift4__current_openshift_server_url

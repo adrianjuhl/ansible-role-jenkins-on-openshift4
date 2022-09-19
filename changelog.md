@@ -1,4 +1,9 @@
 
+### v1.0.1
+
+Facilitate ansible check mode:
+- command tasks that make no changes and only gather information have been updated with 'check_mode: false' option to allow them to run during normal mode and check mode runs
+
 ### v1.0.0
 
  - Switched to use the kubernetes.core.k8s ansible module to configure resources, rather than use 'oc apply'.

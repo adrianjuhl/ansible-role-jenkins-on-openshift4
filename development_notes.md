@@ -1,4 +1,9 @@
 
+### v1.0.1
+
+* [Asnible User Guide: Validating Tasks](https://docs.ansible.com/ansible/latest/user_guide/playbooks_checkmode.html)
+* [Understanding Ansible’s check_mode](https://medium.com/opsops/understanding-ansibles-check-mode-299fd8a6a532)
+
 ### v1.0.0
 
 [kubernetes.core](https://docs.ansible.com/ansible/latest/collections/kubernetes/core/index.html) Ansible collection.
