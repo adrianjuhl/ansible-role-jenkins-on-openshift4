@@ -1,0 +1,10 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<scriptApproval>
+  <approvedScriptHashes/>
+  <approvedSignatures/>
+  <aclApprovedSignatures/>
+  <approvedClasspathEntries/>
+  <pendingScripts/>
+  <pendingSignatures/>
+  <pendingClasspathEntries/>
+</scriptApproval>

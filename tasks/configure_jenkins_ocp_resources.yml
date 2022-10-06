@@ -160,6 +160,20 @@
             <showRawYaml>true</showRawYaml>
           </org.csanchez.jenkins.plugins.kubernetes.PodTemplate>
 
+- name: Configure the jenkins-script-approval-xml-ConfigMap
+  kubernetes.core.k8s:
+    kind: ConfigMap
+    api_version: v1
+    name: jenkins-script-approval-xml
+    namespace: "{{ adrianjuhl__jenkins_on_openshift4__openshift_namespace_jenkins }}"
+    state: present
+    resource_definition:
+      metadata:
+        labels:
+          app: jenkins
+      data:
+        script_approval_xml_file_content: "{{ adrianjuhl__jenkins_on_openshift4__jenkins_script_approval_xml_file_content }}"
+
 - name: Configure the jenkins-agent-maven-dotm2-settings-xml-Secret
   kubernetes.core.k8s:
     kind: Secret
@@ -271,10 +285,17 @@
                 args:
                   - -c
                   - >-
+                      echo Copying scriptApproval.xml into place... &&
+                      cp /jenkins-script-approval-xml /jenkins-data/scriptApproval.xml &&
                       echo Copying settings.xml into place ... &&
                       cp /jenkins-agent-maven-dotm2-settings-xml/settings_xml /jenkins-agent-maven-dotm2-directory/settings.xml &&
                       echo Done
                 volumeMounts:
+                  - mountPath: /jenkins-data
+                    name: jenkins-data
+                  - mountPath: /jenkins-script-approval-xml
+                    name: jenkins-script-approval-xml
+                    subPath: script_approval_xml_file_content
                   - mountPath: /jenkins-agent-maven-dotm2-directory
                     name: jenkins-agent-maven-dotm2-directory
                   - mountPath: /jenkins-agent-maven-dotm2-settings-xml
@@ -286,10 +307,13 @@
               - name: jenkins-data
                 persistentVolumeClaim:
                   claimName: jenkins
-              - configMap:
+              - name: jenkins-trusted-ca-bundle
+                configMap:
                   name: jenkins-trusted-ca-bundle
                   optional: true
-                name: jenkins-trusted-ca-bundle
+              - name: jenkins-script-approval-xml
+                configMap:
+                  name: jenkins-script-approval-xml
               - name: jenkins-agent-maven-dotm2-directory
                 persistentVolumeClaim:
                   claimName: jenkins-agent-maven-dotm2-directory
