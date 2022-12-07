@@ -10,6 +10,7 @@ adrianjuhl__jenkins_on_openshift4__jenkins_pvc_storage_size: "1G"
 adrianjuhl__jenkins_on_openshift4__jenkins_pvc_storage_class_name: ""
 adrianjuhl__jenkins_on_openshift4__jenkins_install_plugins: ""
 adrianjuhl__jenkins_on_openshift4__jenkins_script_approval_xml_file_content: "{{ lookup('file', 'adrianjuhl__jenkins_on_openshift4__scriptApproval.xml') }}"
+adrianjuhl__jenkins_on_openshift4__jenkins_timezone: "UTC"
 
 adrianjuhl__jenkins_on_openshift4__jenkins_agent_maven_source_imagestreamtag_name: "jenkins-agent-maven:latest"
 adrianjuhl__jenkins_on_openshift4__jenkins_agent_maven_source_imagestreamtag_namespace: "openshift"

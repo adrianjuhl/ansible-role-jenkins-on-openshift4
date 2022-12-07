@@ -1,4 +1,12 @@
 
+### v1.2.0
+
+Introduce the ability to configure the timezone for the jenkins server and maven agent pods.
+
+### v1.1.0
+
+Introduce the ability to configure the In-Process Script Approvals (scriptApproval.xml) file.
+
 ### v1.0.1
 
 * [Asnible User Guide: Validating Tasks](https://docs.ansible.com/ansible/latest/user_guide/playbooks_checkmode.html)

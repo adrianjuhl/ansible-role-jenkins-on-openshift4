@@ -152,7 +152,12 @@
                 </livenessProbe>
               </org.csanchez.jenkins.plugins.kubernetes.ContainerTemplate>
             </containers>
-            <envVars/>
+            <envVars>
+              <org.csanchez.jenkins.plugins.kubernetes.model.KeyValueEnvVar>
+                <key>TZ</key>
+                <value>{{ adrianjuhl__jenkins_on_openshift4__jenkins_timezone }}</value>
+              </org.csanchez.jenkins.plugins.kubernetes.model.KeyValueEnvVar>
+            </envVars>
             <annotations/>
             <imagePullSecrets/>
             <nodeProperties/>
@@ -249,6 +254,8 @@
                     value: /var/lib/jenkins/proxy.yaml
                   - name: INSTALL_PLUGINS
                     value: "{{ adrianjuhl__jenkins_on_openshift4__jenkins_install_plugins }}"
+                  - name: TZ
+                    value: "{{ adrianjuhl__jenkins_on_openshift4__jenkins_timezone }}"
                 image: ' '
                 imagePullPolicy: IfNotPresent
                 livenessProbe:

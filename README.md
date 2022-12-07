@@ -50,7 +50,19 @@ The storage class to use for the storage for Jenkins.
 
     adrianjuhl__jenkins_on_openshift4__jenkins_install_plugins: ""
 
-Specifies additional Jenkins plugins to install. Plugins are specified as a comm-delimited list of name:version pairs. For example: `"pipeline-utility-steps:2.12.0,workflow-cps:2660.vb_c0412dc4e6d"`
+Specifies additional Jenkins plugins to install. Plugins are specified as a comma-delimited list of name:version pairs. For example: `"pipeline-utility-steps:2.12.0,workflow-cps:2660.vb_c0412dc4e6d"`
+
+**jenkins_script_approval_xml_file_content**
+
+    adrianjuhl__jenkins_on_openshift4__jenkins_script_approval_xml_file_content: "{{ lookup('file', 'adrianjuhl__jenkins_on_openshift4__scriptApproval.xml') }}"
+
+The file content with which to configure Jenkins's scriptApproval.xml file.
+
+**jenkins_timezone**
+
+    adrianjuhl__jenkins_on_openshift4__jenkins_timezone: "UTC"
+
+The timezone with which to configure jenkins and agent pods.
 
 **jenkins_agent_maven_source_imagestreamtag_name**
 
