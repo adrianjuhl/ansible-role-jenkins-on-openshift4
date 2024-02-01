@@ -285,7 +285,7 @@
                   - mountPath: /etc/pki/ca-trust/source/anchors
                     name: jenkins-trusted-ca-bundle
             initContainers:
-              - name: configure-jenkins-agent-maven-dotm2-settings-xml-file
+              - name: jenkins-init
                 image: ' '
                 imagePullPolicy: IfNotPresent
                 command: ['sh']
@@ -294,6 +294,9 @@
                   - >-
                       echo Copying scriptApproval.xml into place... &&
                       cp /jenkins-script-approval-xml /jenkins-data/scriptApproval.xml &&
+                      echo Copying init.groovy.d scripts into place... &&
+                      mkdir -p /jenkins-data/init.groovy.d/ &&
+                      cp /jenkins-init-groovy-scripts/*.groovy /jenkins-data/init.groovy.d/ &&
                       echo Copying settings.xml into place ... &&
                       cp /jenkins-agent-maven-dotm2-settings-xml/settings_xml /jenkins-agent-maven-dotm2-directory/settings.xml &&
                       echo Done
@@ -307,6 +310,8 @@
                     name: jenkins-agent-maven-dotm2-directory
                   - mountPath: /jenkins-agent-maven-dotm2-settings-xml
                     name: jenkins-agent-maven-dotm2-settings-xml
+                  - mountPath: /jenkins-init-groovy-scripts
+                    name: jenkins-init-groovy-scripts
             dnsPolicy: ClusterFirst
             restartPolicy: Always
             serviceAccountName: jenkins
@@ -327,6 +332,10 @@
               - name: jenkins-agent-maven-dotm2-settings-xml
                 secret:
                   secretName: jenkins-agent-maven-dotm2-settings-xml
+              - name: jenkins-init-groovy-scripts
+                configMap:
+                  name: jenkins-init-groovy-scripts
+                  optional: true
         test: false
         triggers:
           - type: ImageChange
@@ -334,7 +343,7 @@
               automatic: true
               containerNames:
                 - jenkins
-                - configure-jenkins-agent-maven-dotm2-settings-xml-file
+                - jenkins-init
               from:
                 kind: ImageStreamTag
                 name: "{{ adrianjuhl__jenkins_on_openshift4__jenkins_source_imagestreamtag_name }}"

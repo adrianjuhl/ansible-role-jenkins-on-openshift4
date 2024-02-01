@@ -1,4 +1,14 @@
 
+## ansible-galaxy role import
+```
+$ ansible-galaxy role import --role-name=$(yq '.galaxy_info.role_name' meta/main.yml) adrianjuhl ansible-role-jenkins-on-openshift4
+```
+## Notes by version
+
+### v1.3.0
+
+Introduce the ability to configure the post-initialization (init) groovy hook scripts.
+
 ### v1.2.0
 
 Introduce the ability to configure the timezone for the jenkins server and maven agent pods.

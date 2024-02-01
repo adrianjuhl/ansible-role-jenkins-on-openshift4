@@ -1,4 +1,16 @@
 
+### v1.3.0
+
+Introduce the ability to configure the post-initialization (init) groovy hook scripts.
+
+### v1.2.0
+
+Introduce the ability to configure the timezone for the jenkins server and maven agent pods.
+
+### v1.1.0
+
+Introduce the ability to configure the In-Process Script Approvals (scriptApproval.xml) file.
+
 ### v1.0.1
 
 Facilitate ansible check mode:
