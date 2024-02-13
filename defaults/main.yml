@@ -21,3 +21,5 @@ adrianjuhl__jenkins_on_openshift4__maven_settings_server1: "<!-- No server1 is c
 adrianjuhl__jenkins_on_openshift4__maven_settings_server2: "<!-- No server2 is configured. -->"
 adrianjuhl__jenkins_on_openshift4__maven_settings_server3: "<!-- No server3 is configured. -->"
 adrianjuhl__jenkins_on_openshift4__maven_settings_mirror: "<!-- No mirror is configured. -->"
+
+adrianjuhl__jenkins_on_openshift4__allow_pvc_reconfiguration: true

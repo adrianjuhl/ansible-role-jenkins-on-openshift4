@@ -5,6 +5,10 @@ $ ansible-galaxy role import --role-name=$(yq '.galaxy_info.role_name' meta/main
 ```
 ## Notes by version
 
+### v1.4.0
+
+Introduce the ability to optionally reconfigure the PVCs.
+
 ### v1.3.0
 
 Introduce the ability to configure the post-initialization (init) groovy hook scripts.

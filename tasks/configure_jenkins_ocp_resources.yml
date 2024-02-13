@@ -62,7 +62,8 @@
           requests:
             storage: "{{ adrianjuhl__jenkins_on_openshift4__jenkins_pvc_storage_size }}"
         storageClassName: "{{ adrianjuhl__jenkins_on_openshift4__jenkins_pvc_storage_class_name }}"
-  when: jenkins_pvc_result.resources | length == 0
+  when: (jenkins_pvc_result.resources | length == 0)
+        or (adrianjuhl__jenkins_on_openshift4__allow_pvc_reconfiguration)
 
 - name: Determine if the jenkins-agent-maven-dotm2-directory-PersistentVolumeClaim is already present
   kubernetes.core.k8s_info:
@@ -89,7 +90,8 @@
           requests:
             storage: "{{ adrianjuhl__jenkins_on_openshift4__jenkins_agent_maven_dotm2_directory_pvc_storage_size }}"
         storageClassName: "{{ adrianjuhl__jenkins_on_openshift4__jenkins_agent_maven_dotm2_directory_pvc_storage_class_name }}"
-  when: jenkins_agent_maven_dotm2_directory_pvc_result.resources | length == 0
+  when: (jenkins_agent_maven_dotm2_directory_pvc_result.resources | length == 0)
+        or (adrianjuhl__jenkins_on_openshift4__allow_pvc_reconfiguration)
 
 - name: Configure the jenkins-agent-maven-ConfigMap
   kubernetes.core.k8s:

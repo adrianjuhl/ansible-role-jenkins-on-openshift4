@@ -112,6 +112,12 @@ The server element (third of up to three) to be used in the .m2/settings.xml fil
 
 The mirror element to be used in the .m2/settings.xml file of maven agent pods.
 
+**allow_pvc_reconfiguration**
+
+    adrianjuhl__jenkins_on_openshift4__allow_pvc_reconfiguration: true
+
+Allow the PVCs that are provisioned for Jenkins to be reconfigured, to facilitate, for example, PVC size increases.
+
 ## Dependencies
 
 None.
